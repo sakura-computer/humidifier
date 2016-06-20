@@ -62,15 +62,12 @@
       <div id="content"><div id='filecontents'>
 <h1 id="label-Humidifier">Humidifier</h1>
 
-<p><a
-href="https://travis-ci.com/localytics/humidifier.svg?token=kQUiABmGkzyHdJdMnCnv&branch=master">{Build
-Status</a>]
-<a
-href="https://coveralls.io/repos/github/localytics/humidifier/badge.svg?branch=master&t=52zybb">{Coverage
-Status</a>]
-<a
-href="http://artifactory-badge.gw.localytics.com/gem/humidifier">{Gem
-Version</a>]</p>
+<p><a href="https://travis-ci.org/localytics/humidifier"><img
+src="https://travis-ci.org/localytics/humidifier.svg?branch=master"></a> <a
+href="https://coveralls.io/github/localytics/humidifier?branch=master"><img
+src="https://coveralls.io/repos/github/localytics/humidifier/badge.svg?branch=master&t=52zybb"></a>
+<a href="https://rubygems.org/gems/humidifier"><img
+src="https://img.shields.io/gem/v/humidifier.svg?maxAge=3600"></a></p>
 
 <p>Humidifier allows you to build AWS CloudFormation (CFN) templates
 programmatically. CFN stacks and resources are represented as Ruby objects
@@ -100,23 +97,23 @@ JSON attribute. Each attribute can also be set through the
 
 <h3 id="label-Example+usage">Example usage</h3>
 
-<pre class="ruby"><span class="ruby-identifier">stack</span> = <span class="ruby-constant">Humidifier</span><span class="ruby-operator">::</span><span class="ruby-constant">Stack</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">name</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Example-Stack&#39;</span>, <span class="ruby-identifier">aws_template_format_version</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;2010-09-09&#39;</span>)
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_stack'>stack</span> <span class='op'>=</span> <span class='const'>Humidifier</span><span class='op'>::</span><span class='const'>Stack</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='label'>name:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Example-Stack</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>aws_template_format_version:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>2010-09-09</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
 
-<span class="ruby-identifier">load_balancer</span> = <span class="ruby-constant">Humidifier</span><span class="ruby-operator">::</span><span class="ruby-constant">ElasticLoadBalancing</span><span class="ruby-operator">::</span><span class="ruby-constant">LoadBalancer</span>.<span class="ruby-identifier">new</span>(
-  <span class="ruby-identifier">listeners</span><span class="ruby-operator">:</span> [{ <span class="ruby-constant">LoadBalancerPort</span><span class="ruby-operator">:</span> <span class="ruby-value">80</span>, <span class="ruby-constant">Protocol</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;http&#39;</span>, <span class="ruby-constant">InstancePort</span><span class="ruby-operator">:</span> <span class="ruby-value">80</span>, <span class="ruby-constant">InstanceProtocol</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;http&#39;</span> }]
-)
-<span class="ruby-identifier">load_balancer</span>.<span class="ruby-identifier">scheme</span> = <span class="ruby-string">&#39;internal&#39;</span>
+<span class='id identifier rubyid_load_balancer'>load_balancer</span> <span class='op'>=</span> <span class='const'>Humidifier</span><span class='op'>::</span><span class='const'>ElasticLoadBalancing</span><span class='op'>::</span><span class='const'>LoadBalancer</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span>
+  <span class='label'>listeners:</span> <span class='lbracket'>[</span><span class='lbrace'>{</span> <span class='label'>LoadBalancerPort:</span> <span class='int'>80</span><span class='comma'>,</span> <span class='label'>Protocol:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>http</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>InstancePort:</span> <span class='int'>80</span><span class='comma'>,</span> <span class='label'>InstanceProtocol:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>http</span><span class='tstring_end'>&#39;</span></span> <span class='rbrace'>}</span><span class='rbracket'>]</span>
+<span class='rparen'>)</span>
+<span class='id identifier rubyid_load_balancer'>load_balancer</span><span class='period'>.</span><span class='id identifier rubyid_scheme'>scheme</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>internal</span><span class='tstring_end'>&#39;</span></span>
 
-<span class="ruby-identifier">auto_scaling_group</span> = <span class="ruby-constant">Humidifier</span><span class="ruby-operator">::</span><span class="ruby-constant">AutoScaling</span><span class="ruby-operator">::</span><span class="ruby-constant">AutoScalingGroup</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">min_size</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;1&#39;</span>, <span class="ruby-identifier">max_size</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;20&#39;</span>)
-<span class="ruby-identifier">auto_scaling_group</span>.<span class="ruby-identifier">update</span>(
-  <span class="ruby-identifier">availability_zones</span><span class="ruby-operator">:</span> [<span class="ruby-string">&#39;us-east-1a&#39;</span>],
-  <span class="ruby-identifier">load_balancer_names</span><span class="ruby-operator">:</span> [<span class="ruby-constant">Humidifier</span>.<span class="ruby-identifier">ref</span>(<span class="ruby-string">&#39;LoadBalancer&#39;</span>)]
-)
+<span class='id identifier rubyid_auto_scaling_group'>auto_scaling_group</span> <span class='op'>=</span> <span class='const'>Humidifier</span><span class='op'>::</span><span class='const'>AutoScaling</span><span class='op'>::</span><span class='const'>AutoScalingGroup</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='label'>min_size:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>max_size:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>20</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+<span class='id identifier rubyid_auto_scaling_group'>auto_scaling_group</span><span class='period'>.</span><span class='id identifier rubyid_update'>update</span><span class='lparen'>(</span>
+  <span class='label'>availability_zones:</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>us-east-1a</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='label'>load_balancer_names:</span> <span class='lbracket'>[</span><span class='const'>Humidifier</span><span class='period'>.</span><span class='id identifier rubyid_ref'>ref</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>LoadBalancer</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rbracket'>]</span>
+<span class='rparen'>)</span>
 
-<span class="ruby-identifier">stack</span>.<span class="ruby-identifier">add</span>(<span class="ruby-string">&#39;LoadBalancer&#39;</span>, <span class="ruby-identifier">load_balancer</span>)
-<span class="ruby-identifier">stack</span>.<span class="ruby-identifier">add</span>(<span class="ruby-string">&#39;AutoScalingGroup&#39;</span>, <span class="ruby-identifier">auto_scaling_group</span>)
-<span class="ruby-identifier">stack</span>.<span class="ruby-identifier">deploy_and_wait</span>
-</pre>
+<span class='id identifier rubyid_stack'>stack</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>LoadBalancer</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_load_balancer'>load_balancer</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_stack'>stack</span><span class='period'>.</span><span class='id identifier rubyid_add'>add</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>AutoScalingGroup</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_auto_scaling_group'>auto_scaling_group</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_stack'>stack</span><span class='period'>.</span><span class='id identifier rubyid_deploy_and_wait'>deploy_and_wait</span>
+</code></pre>
 
 <h3 id="label-Interfacing+with+AWS">Interfacing with AWS</h3>
 
@@ -185,11 +182,12 @@ repository.</p>
 <h3 id="label-Testing">Testing</h3>
 
 <p>The default rake task runs the tests. Coverage is reported on the command
-line, and to coveralls.io in CI. Styling is governed by rubocop. To run
-both tests and rubocop:</p>
+line, and to coveralls.io in CI. Styling is governed by rubocop. The docs
+are generated with yard. To run all three of these, run:</p>
 
 <pre class="code ruby"><code class="ruby">$ bundle exec rake
-$ bundle exec rubocop</code></pre>
+$ bundle exec rubocop
+$ bundle exec rake yard</code></pre>
 
 <h3 id="label-Specs">Specs</h3>
 
@@ -206,13 +204,6 @@ for each resource by going to the individual page.</p>
 lifting of changing AWS property names over to ruby method names. As such,
 it&#39;s been extracted to a native extension to increase speed and
 efficiency. To compile it locally run <code>rake compile</code>.</p>
-
-<h3 id="label-Docs">Docs</h3>
-
-<p>To build the docs, run <code>bundle exec rake yard</code>. Once the docs
-are built, push to the <code>gh-pages</code> git subtree which will
-automatically update the github pages site (<code>git subtree push --prefix
-doc origin gh-pages</code>).</p>
 
 <h3 id="label-Contributing">Contributing</h3>
 
